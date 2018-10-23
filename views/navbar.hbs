@@ -1,0 +1,20 @@
+<div class="nav">
+    {{#topics}}
+    <div class="nav-section">
+        <p class="nav-section-title">{{title}}</p>
+        <ul class="nav-list">
+            {{#pages}}                  
+                {{#if data}}
+                    <p class="nav-subsection-title">{{title}}</p>
+                    {{#data}}
+                    <li class="nav-link-item"><a href="{{url}}">{{title}}</a></li>
+                    {{/data}}
+                {{else}}
+                <li class="nav-link-item"><a href="{{url}}">{{title}}</a></li>
+                {{/if}}
+            {{/pages}}
+        </ul>
+    </div>
+    {{/topics}}
+    {{> footer}}
+</div>

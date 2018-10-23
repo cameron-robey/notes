@@ -1,0 +1,35 @@
+.nav {
+    display: inline-block;
+    flex: 3;
+    margin-top: 50px;
+    padding: 20px;
+}
+
+.nav-section-title {
+    color: $primary;
+    margin: 0;
+    font-weight: 700;
+}
+
+.nav-subsection-title {
+    font-weight: 600;
+    margin: 0;
+}
+
+.nav-list {
+    list-style-type: none;
+    padding: 0;
+    li {
+        a {
+            text-decoration: none;
+            color: #000;
+        }
+        a:hover {
+            text-shadow: 0 0 1px #000;
+        }
+    }
+}
+
+.nav-link-item {
+    padding-left: 10px;
+}

@@ -1,0 +1,28 @@
+{
+  "name": "physics",
+  "version": "1.0.0",
+  "description": "AQA Physics A Level",
+  "main": "index.js",
+  "scripts": {
+    "build": "node build.js && node-sass scss/main.scss build/resource/style.css"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/cameron-robey/physics.git"
+  },
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/cameron-robey/physics/issues"
+  },
+  "homepage": "https://github.com/cameron-robey/physics#readme",
+  "dependencies": {
+    "chalk": "^2.4.1",
+    "handlebars": "^4.0.12",
+    "imagemin": "^6.0.0",
+    "imagemin-jpegtran": "^5.0.2",
+    "imagemin-pngquant": "^6.0.0",
+    "rimraf": "^2.6.2",
+    "showdown": "^1.8.7"
+  }
+}

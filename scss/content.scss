@@ -1,0 +1,33 @@
+.content {
+    flex: 7;
+    display: inline-block;
+    margin-bottom: 40px;
+}
+
+h1 {
+    border-bottom: $border-light;
+    padding-bottom: 5px;
+}
+
+table {
+    border-collapse: collapse;
+    width: 100%;
+    td, th {
+        border: 1px solid #ddd;
+        padding: 8px;
+    }
+    tr:nth-child(even){background-color: #f2f2f2;}
+    tr:hover {background-color: #ddd;}
+    th {
+        padding-top: 12px;
+        padding-bottom: 12px;
+        text-align: left;
+        background-color: $primary;
+        color: white;
+    }
+}
+
+img {
+    width: 70%;
+    margin-left: 15%;
+}

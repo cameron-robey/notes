@@ -1,0 +1,10 @@
+# Data
+/build
+
+# Node
+/node_modules
+package-lock.json
+
+# Dev
+todo.md
+/temp

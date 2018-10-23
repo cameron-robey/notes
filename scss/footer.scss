@@ -1,0 +1,15 @@
+footer {
+    border-top: $border-light;
+    margin-top: 20px;
+    padding: 20px;
+    p {
+        margin: 0;
+    }
+    a {
+        text-decoration: none;
+        color: $primary;
+    }
+    a:hover {
+        text-shadow: 0 0 1px $primary;
+    }
+}
