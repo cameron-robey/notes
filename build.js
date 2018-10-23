@@ -24,7 +24,7 @@ const process = async () => {
 
     // Generate navbar template:
     let nav = topics.map((topic) => {
-        const topicPath = topic.substring(3).replace(/\s/g, '-').toLowerCase(); // <- regex removes number and replaces spaces with dash
+        const topicPath = topic.split('~')[1].replace(/\s/g, '-').toLowerCase(); // <- regex removes number and replaces spaces with dash
         let topicRtn = { title: topic.replace(/~/g, ': ').replace(/^0/, ''), pages: [] }; // <- regex replaces ~ with colon and removes leading 0
 
         // Loop through directories
@@ -32,20 +32,20 @@ const process = async () => {
         dir.map((item) => {
             if (fs.lstatSync(contentFolder+'/'+topic+'/'+item).isDirectory()) {
                 // Subdirectory present
-                const itemPath = item.substring(3).replace(/\s/g, '-').toLowerCase();
+                const itemPath = item.split('~')[1].replace(/\s/g, '-').toLowerCase();
                 const subDir = fs.readdirSync(contentFolder+'/'+topic+'/'+item);
                 let itemRtn = [];
                 subDir.map((file) => {
                     itemRtn.push({
                             title: file.substring(0,file.length-3).replace(/~/g, ': ').replace(/^0/, ''),
-                            url: '/' + topicPath + '/' + itemPath + '/' + file.replace('.md', '').substring(3).replace(/\s/g, '-').toLowerCase()
+                            url: '/' + topicPath + '/' + itemPath + '/' + file.replace('.md', '').split('~')[1].replace(/\s/g, '-').toLowerCase()
                     });
                 });
                 topicRtn.pages.push({ title: item.replace(/~/g, ': ').replace(/^0/, ''),data: itemRtn });
             } else {
                 topicRtn.pages.push({
                     title: item.substring(0,item.length-3).replace(/~/g, ': ').replace(/^0/, ''),
-                    url: '/' + topicPath + '/' + item.replace('.md', '').substring(3).toLowerCase().replace(/\s/g, '-')
+                    url: '/' + topicPath + '/' + item.replace('.md', '').split('~')[1].toLowerCase().replace(/\s/g, '-')
                 });
             }
         });
@@ -66,14 +66,14 @@ const process = async () => {
     
     // Create pages
     topics.map((topic) => {
-        const topicPath = topic.substring(3).replace(/\s/g, '-').toLowerCase(); // <- Regex removes number and replaces spaces
+        const topicPath = topic.split('~')[1].replace(/\s/g, '-').toLowerCase(); // <- Regex removes number and replaces spaces
         fs.mkdirSync('build/' + topicPath);
         const dir = fs.readdirSync(contentFolder+'/' + topic);
 
         dir.map((item) => {
             if (fs.lstatSync(contentFolder+'/'+topic+'/'+item).isDirectory()) {
                 // There is a subdirectory - create directory page
-                const itemPath = item.substring(3).replace(/\s/g, '-').toLowerCase();
+                const itemPath = item.split('~')[1].replace(/\s/g, '-').toLowerCase();
                 fs.mkdirSync('build/' + topicPath + '/' + itemPath);
 
                 // Get subpages
@@ -82,17 +82,17 @@ const process = async () => {
                     // There is a file - create page
                     const data = convert.mdtohtml(contentFolder+'/'+topic+'/'+item+'/'+file);
                     const page = create.constructPage(data, nav);
-                    const path = 'build/' + topicPath + '/' + itemPath + '/' + file.replace('.md', '').substring(3).replace(/\s/g, '-').toLowerCase() + '.html';
+                    const path = 'build/' + topicPath + '/' + itemPath + '/' + file.replace('.md', '').split('~')[1].replace(/\s/g, '-').toLowerCase() + '.html';
                     fs.writeFileSync(path, page);
-                    console.log(chalk.green('Creating page: ') + file.replace('.md', '').substring(3));
+                    console.log(chalk.green('Creating page: ') + file.replace('.md', '').split('~')[1]);
                 });
             } else {
                 // There is a file - create page
                 const data = convert.mdtohtml(contentFolder+'/'+topic+'/'+item);
                 const page = create.constructPage(data, nav)
-                const path = 'build/' + topicPath + '/' + item.replace('.md', '').substring(3).toLowerCase().replace(/\s/g, '-') + '.html';
+                const path = 'build/' + topicPath + '/' + item.replace('.md', '').split('~')[1].toLowerCase().replace(/\s/g, '-') + '.html';
                 fs.writeFileSync(path, page);
-                console.log(chalk.green('Creating page: ') + item.replace('.md', '').substring(3));
+                console.log(chalk.green('Creating page: ') + item.replace('.md', '').split('~')[1]);
             }
         });
     });
