@@ -1,12 +1,14 @@
 const fs = require('fs');
 const handlebars = require('handlebars');
 
+const viewsFolder = './lib/views';
+
 const constructPage = (content, navContent) => {
-    const headSrc = fs.readFileSync('views/head.hbs', 'utf-8');
+    const headSrc = fs.readFileSync(viewsFolder + '/head.hbs', 'utf-8');
     const head = handlebars.compile(headSrc);
-    const navbarSrc = fs.readFileSync('views/navbar.hbs', 'utf-8');
+    const navbarSrc = fs.readFileSync(viewsFolder + '/navbar.hbs', 'utf-8');
     const navbar = handlebars.compile(navbarSrc);
-    const footerSrc = fs.readFileSync('views/footer.hbs', 'utf-8');
+    const footerSrc = fs.readFileSync(viewsFolder + '/footer.hbs', 'utf-8');
     const footer = handlebars.registerPartial('footer', footerSrc);
 
 

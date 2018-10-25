@@ -2,13 +2,16 @@
 const fs = require('fs');
 const rimraf = require('rimraf');
 const chalk = require('chalk');
+const compressor = require('node-minify');
 
 // Modules
-const convert = require('./src/convert');
-const create = require('./src/create');
+const convert = require('./convert');
+const create = require('./create');
 
-const contentFolder = 'data/content';
-const imgFolder = 'data/img';
+// Directories
+const contentFolder = './data/content';
+const imgFolder = './data/img';
+const jsFolder = './lib/js';
 
 console.log(chalk.yellow('Message: ') + 'Starting Build Script');
 
@@ -97,6 +100,25 @@ const process = async () => {
         });
     });
     console.log(chalk.yellow('Message: ') + 'Created all pages' + '\n\n' + chalk.bold.red('Data is all parsed' + '\n'));
+
+    // Minify javascript
+    console.log(chalk.yellow('Message: ') + 'Minifying javascipt');
+
+    // Get javascript files from directories
+    const js = fs.readdirSync(jsFolder);
+    console.log(chalk.blue('Javscript: ') + 'Found ' + js.length + ' files');
+    js.map((file) => {
+        console.log(chalk.blue('Javascript file: ') + file);
+    });
+
+    // Minify
+    await compressor.minify({
+        compressor: 'gcc',
+        input: jsFolder + '/*.js',
+        output: './build/resource/script.js'
+    });
+
+    console.log(chalk.yellow('Message: ') + 'Minifying javascipt done');
 }
 
 process();

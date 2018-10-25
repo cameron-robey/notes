@@ -1,10 +1,10 @@
 {
-  "name": "physics",
+  "name": "notes",
   "version": "1.0.0",
-  "description": "AQA Physics A Level",
+  "description": "NodeJS Processor for markdown notes",
   "main": "index.js",
   "scripts": {
-    "build": "node build.js && node-sass scss/main.scss build/resource/style.css"
+    "build": "node src/build.js && node-sass lib/scss/main.scss build/resource/style.css"
   },
   "repository": {
     "type": "git",
@@ -22,6 +22,7 @@
     "imagemin": "^6.0.0",
     "imagemin-jpegtran": "^5.0.2",
     "imagemin-pngquant": "^6.0.0",
+    "node-minify": "^3.6.0",
     "rimraf": "^2.6.2",
     "showdown": "^1.8.7"
   }
