@@ -3,7 +3,7 @@ const handlebars = require('handlebars');
 
 const viewsFolder = './lib/views';
 
-const constructPage = (content, navContent) => {
+const constructPage = (content, navContent, title) => {
     const headSrc = fs.readFileSync(viewsFolder + '/head.hbs', 'utf-8');
     const head = handlebars.compile(headSrc);
     const navbarSrc = fs.readFileSync(viewsFolder + '/navbar.hbs', 'utf-8');
@@ -13,7 +13,7 @@ const constructPage = (content, navContent) => {
 
 
     let rtn = '<!doctype html><html>';
-    rtn += head();
+    rtn += head({title: title});
     rtn += '<body><div class="main">';
     rtn += navbar(navContent);
     rtn += '<div class="content">';

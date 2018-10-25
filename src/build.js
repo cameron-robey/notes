@@ -85,7 +85,7 @@ const process = async () => {
                 subDir.map((file) => {
                     // There is a file - create page
                     const data = convert.mdtohtml(contentFolder+'/'+topic+'/'+item+'/'+file);
-                    const page = create.constructPage(data, nav);
+                    const page = create.constructPage(data, nav, file.replace('.md', '').split('~')[1]);
                     const path = 'build/' + topicPath + '/' + itemPath + '/' + file.replace('.md', '').split('~')[1].replace(/\s/g, '-').toLowerCase() + '.html';
                     fs.writeFileSync(path, page);
                     console.log(chalk.green('Creating page: ') + file.replace('.md', '').split('~')[1]);
@@ -93,7 +93,7 @@ const process = async () => {
             } else {
                 // There is a file - create page
                 const data = convert.mdtohtml(contentFolder+'/'+topic+'/'+item);
-                const page = create.constructPage(data, nav)
+                const page = create.constructPage(data, nav, item.replace('.md', '').split('~')[1])
                 const path = 'build/' + topicPath + '/' + item.replace('.md', '').split('~')[1].toLowerCase().replace(/\s/g, '-') + '.html';
                 fs.writeFileSync(path, page);
                 console.log(chalk.green('Creating page: ') + item.replace('.md', '').split('~')[1]);
