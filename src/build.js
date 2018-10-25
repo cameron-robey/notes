@@ -28,7 +28,7 @@ const process = async () => {
     // Generate navbar template:
     let nav = topics.map((topic) => {
         const topicPath = topic.split('~')[1].replace(/\s/g, '-').toLowerCase(); // <- regex removes number and replaces spaces with dash
-        let topicRtn = { title: topic.replace(/~/g, ': ').replace(/^0/, ''), pages: [] }; // <- regex replaces ~ with colon and removes leading 0
+        let topicRtn = { title: topic.replace(/~/g, ': ').replace(/^0/, ''), href: topic.split('~')[1].replace(/\s/g, '-').toLowerCase(), pages: [] }; // <- regex replaces ~ with colon and removes leading 0
 
         // Loop through directories
         const dir = fs.readdirSync(contentFolder + '/' + topic);
@@ -56,6 +56,7 @@ const process = async () => {
     });
     nav = {topics: nav};
     console.log(chalk.yellow('Message: ') + 'Assembled Navbar');
+    
 
     // Process images
     const images = fs.readdirSync(imgFolder);

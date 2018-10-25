@@ -1,7 +1,7 @@
 <div class="nav">
     {{#topics}}
-    <div class="nav-section">
-        <p class="nav-section-title">{{title}}</p>
+    <div class="nav-section nav-small" id={{href}}>
+        <p class="nav-section-title" onclick="toggleView(this.attributes['data-toggle'].value)" data-toggle={{href}}>{{title}}</p>
         <ul class="nav-list">
             {{#pages}}                  
                 {{#if data}}
