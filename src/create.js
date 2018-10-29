@@ -11,7 +11,6 @@ const constructPage = (content, navContent, title) => {
     const footerSrc = fs.readFileSync(viewsFolder + '/footer.hbs', 'utf-8');
     const footer = handlebars.registerPartial('footer', footerSrc);
 
-
     let rtn = '<!doctype html><html>';
     rtn += head({title: title});
     rtn += '<body><div class="main">';
