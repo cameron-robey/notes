@@ -15,15 +15,13 @@ const mdtohtml = (src) => {
 const processImage =  async (name) => {
     const inputPath = 'data/img/' + name;
     const outputPath = 'build/img';
-
     const files = await imagemin([inputPath], outputPath, {
         plugins: [
             imageminJpegtran(),
             imageminPngquant({quality: '65-80'})
         ]
     });
-
-    console.log(chalk.bold.magenta('Succesfully processed image: ') + files[0].path);
+    console.log(chalk.bold.green('Processed image: ') + files[0].path);
     return files[0].path;
 }
 
