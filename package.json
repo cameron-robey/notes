@@ -2,16 +2,16 @@
   "name": "notes",
   "version": "1.0.0",
   "description": "NodeJS Processor for markdown notes",
-  "main": "index.js",
+  "main": "src/build.js",
   "scripts": {
-    "build": "node src/build.js && node-sass lib/scss/main.scss build/resource/style.css"
+    "build": "node src/build.js"
   },
   "repository": {
     "type": "git",
     "url": "git+https://github.com/cameron-robey/physics.git"
   },
   "author": "",
-  "license": "ISC",
+  "license": "MIT",
   "bugs": {
     "url": "https://github.com/cameron-robey/physics/issues"
   },
@@ -23,6 +23,7 @@
     "imagemin-jpegtran": "^5.0.2",
     "imagemin-pngquant": "^6.0.0",
     "node-minify": "^3.6.0",
+    "node-sass": "^4.9.4",
     "rimraf": "^2.6.2",
     "showdown": "^1.8.7"
   }
