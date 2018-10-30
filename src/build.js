@@ -8,6 +8,7 @@ const sass = require('node-sass');
 // Modules
 const convert = require('./convert');
 const create = require('./create');
+const clean = require('./clean');
 
 // Directories
 const contentFolder = './data/content';
@@ -29,30 +30,22 @@ const process = async () => {
     console.log(chalk.magenta('Section started: ') + 'Assembling Navbar');
     let navCount = 0;
     let nav = topics.map((topic) => {
-        const topicPath = topic.split('~')[1].replace(/\s/g, '-').toLowerCase(); // <- regex removes number and replaces spaces with dash
-        let topicRtn = { title: topic.replace(/~/g, ': ').replace(/^0/, ''), href: topic.split('~')[1].replace(/\s/g, '-').toLowerCase(), pages: [] }; // <- regex replaces ~ with colon and removes leading 0
+        const topicPath = clean.path(topic);
+        let topicRtn = { title: clean.title(topic), href: topicPath, pages: [] };
 
         // Loop through directories
         const dir = fs.readdirSync(contentFolder + '/' + topic);
         dir.map((item) => {
             if (fs.lstatSync(contentFolder+'/'+topic+'/'+item).isDirectory()) {
                 // Subdirectory present
-                const itemPath = item.split('~')[1].replace(/\s/g, '-').toLowerCase();
+                const itemPath = clean.path(item);
                 const subDir = fs.readdirSync(contentFolder+'/'+topic+'/'+item);
                 let itemRtn = [];
-                subDir.map((file) => {
-                    itemRtn.push({
-                            title: file.substring(0,file.length-3).replace(/~/g, ': ').replace(/^0/, ''),
-                            url: '/' + topicPath + '/' + itemPath + '/' + file.replace('.md', '').split('~')[1].replace(/\s/g, '-').toLowerCase()
-                    });
-                    navCount++;
-                });
-                topicRtn.pages.push({ title: item.replace(/~/g, ': ').replace(/^0/, ''),data: itemRtn });
+                subDir.map((file) => itemRtn.push({ title: clean.title(file), url: '/' + topicPath + '/' + itemPath + '/' + clean.path(file) }) );
+                topicRtn.pages.push({ title: clean.title(item), data: itemRtn });
+                navCount += itemRtn.length;
             } else {
-                topicRtn.pages.push({
-                    title: item.substring(0,item.length-3).replace(/~/g, ': ').replace(/^0/, ''),
-                    url: '/' + topicPath + '/' + item.replace('.md', '').split('~')[1].toLowerCase().replace(/\s/g, '-')
-                });
+                topicRtn.pages.push({ title: clean.title(item), url: '/' + topicPath + '/' + clean.path(item) });
                 navCount++;
             }
         });
@@ -64,24 +57,20 @@ const process = async () => {
     // Process images
     console.log(chalk.magenta('Section started: ') + 'Processing Images');
     const images = fs.readdirSync(imgFolder);
-    const imgProcess = images.map( async (image) => {
-        let success = convert.processImage(image);
-        return success;
-    });
-    await Promise.all(imgProcess);
+    await Promise.all(images.map( async (image) => convert.processImage(image)));
     console.log(chalk.yellow('Message: ') + 'Processing Images Done' + '\n');
 
     // Create pages
     console.log(chalk.magenta('Section started: ') + 'Creating pages');
     topics.map((topic) => {
-        const topicPath = topic.split('~')[1].replace(/\s/g, '-').toLowerCase(); // <- Regex removes number and replaces spaces
-        fs.mkdirSync('build/' + topicPath);
         const dir = fs.readdirSync(contentFolder+'/' + topic);
+        const topicPath = clean.path(topic);
+        fs.mkdirSync('build/' + topicPath);
 
         dir.map((item) => {
             if (fs.lstatSync(contentFolder+'/'+topic+'/'+item).isDirectory()) {
                 // There is a subdirectory - create directory page
-                const itemPath = item.split('~')[1].replace(/\s/g, '-').toLowerCase();
+                const itemPath = clean.path(item)
                 fs.mkdirSync('build/' + topicPath + '/' + itemPath);
 
                 // Get subpages
@@ -89,18 +78,18 @@ const process = async () => {
                 subDir.map((file) => {
                     // There is a file - create page
                     const data = convert.mdtohtml(contentFolder+'/'+topic+'/'+item+'/'+file);
-                    const page = create.constructPage(data, nav, file.replace('.md', '').split('~')[1]);
-                    const path = 'build/' + topicPath + '/' + itemPath + '/' + file.replace('.md', '').split('~')[1].replace(/\s/g, '-').toLowerCase() + '.html';
+                    const page = create.constructPage(data, nav, clean.pageTitle(file));
+                    const path = 'build/' + topicPath + '/' + itemPath + '/' + clean.path(file) + '.html';
                     fs.writeFileSync(path, page);
-                    console.log(chalk.green('Creating page: ') + file.replace('.md', '').split('~')[1]);
+                    console.log(chalk.green('Creating page: ') + clean.pageTitle(file));
                 });
             } else {
                 // There is a file - create page
                 const data = convert.mdtohtml(contentFolder+'/'+topic+'/'+item);
-                const page = create.constructPage(data, nav, item.replace('.md', '').split('~')[1])
-                const path = 'build/' + topicPath + '/' + item.replace('.md', '').split('~')[1].toLowerCase().replace(/\s/g, '-') + '.html';
+                const page = create.constructPage(data, nav, clean.pageTitle(item));
+                const path = 'build/' + topicPath + '/' + clean.path(item) + '.html';
                 fs.writeFileSync(path, page);
-                console.log(chalk.green('Creating page: ') + item.replace('.md', '').split('~')[1]);
+                console.log(chalk.green('Creating page: ') + clean.pageTitle(item));
             }
         });
     });
@@ -129,10 +118,9 @@ const process = async () => {
     fs.writeFileSync('build/resource/style.css', css.css);
     console.log(chalk.yellow('Message: ') + 'Processing CSS done');
     
-    
     console.log('\n\n' + chalk.bold.red('Data is all parsed') + '\n');
     console.log(chalk.blue('Pages: ') + navCount);
-    console.log(chalk.blue('Images: ') + imgProcess.length);
+    console.log(chalk.blue('Images: ') + images.length);
     console.log(chalk.blue('Javascript files: ') + js.length)
     console.log(chalk.blue('CSS files: ') + css.stats.includedFiles.length + '\n');
 }
